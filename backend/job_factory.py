@@ -3,7 +3,7 @@ job_factory.py
 Factory for creating job objects.
 """
 
-from models import EmailJob, DataProcessingJob, PriorityJob
+from models import EmailJob, DataProcessingJob, PriorityJob, RetryableJob
 
 class JobFactory:
 
@@ -18,5 +18,8 @@ class JobFactory:
 
         elif job_type == "priority":
             return PriorityJob(job_id, args[0], args[1])
+
+        elif job_type == "retry":
+            return RetryableJob(job_id, args[0], args[1])
 
         raise ValueError(f"Unknown job type: {job_type}")

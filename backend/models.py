@@ -83,3 +83,28 @@ class PriorityJob(Job):
 
     def __repr__(self) -> str:
         return (f"<PriorityJob id={self.job_id} priority={self.priority} status={self.status}>")
+
+class RetryableJob(Job):
+    """
+    Child class: retries execution when failures occur.
+    """
+    def __init__(self, job_id: int, description: str, max_retries: int = 3) -> None:
+        super().__init__(job_id, description)
+        self.max_retries = max_retries
+
+    def execute(self) -> None:
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                self.add_log(f"Attempt {attempt} started")
+                print(f"Job {self.job_id}: Attempt {attempt}")
+                # Simulated failure
+                import random
+                if random.random() < 0.5:
+                    raise Exception("Simulated failure")
+                self.add_log(f"Attempt {attempt} succeeded")
+                self.mark_done()
+                return
+            except Exception as e:
+                self.add_log(f"Attempt {attempt} failed: {e}")
+                print(f"Job {self.job_id} failed on attempt {attempt}")
+        self.add_log(f"Failed after {self.max_retries} attempts")

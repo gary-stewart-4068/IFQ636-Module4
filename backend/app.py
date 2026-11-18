@@ -13,7 +13,9 @@ def build_jobs():
         JobFactory.create_job("priority", 3, "Critical security alert", 10),
         JobFactory.create_job("priority", 4, "Urgent payroll processing", 5),
         JobFactory.create_job("email", 5, "admin@example.com"),
-        JobFactory.create_job("data", 6, "dataset_B")
+        JobFactory.create_job("data", 6, "dataset_B"),
+        JobFactory.create_job("retry", 7, "Database backup", 3),
+        JobFactory.create_job("retry", 8, "Cloud sync", 5 )
     ]
 
 if __name__ == "__main__":
