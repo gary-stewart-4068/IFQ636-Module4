@@ -39,3 +39,11 @@ class TaskManager:
             key=lambda job: getattr(job, "priority", 0),
             reverse=True
         )
+
+    def refresh_statuses(self) -> None:
+        all_jobs = []
+        for jobs in self.jobs_by_status.values():
+            all_jobs.extend(jobs)
+        self.jobs_by_status.clear()
+        for job in all_jobs:
+            self.jobs_by_status[job.status].append(job)

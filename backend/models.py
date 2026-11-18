@@ -8,6 +8,8 @@ class Job:
         self.job_id = job_id
         self.description = description
         self.status = "pending"
+        # encapsulated attribute
+        self.__logs = []
 
     def execute(self) -> None:
         """Must be overridden by subclasses."""
@@ -15,6 +17,13 @@ class Job:
 
     def mark_done(self) -> None: 
         self.status = "completed"
+        self.add_log("Job completed successfully")
+
+    def add_log(self, message: str) -> None:
+        self.__logs.append(message)
+
+    def get_logs(self) -> list:
+        return list(self.__logs)
 
     def __repr__(self) -> str:
         return f"<Job id={self.job_id} status={self.status}desc='{self.description}'>"
@@ -27,6 +36,7 @@ class EmailJob(Job):
         self.recipient = recipient
 
     def execute(self) -> None:
+        self.add_log(f"Email send started for {self.recipient}")
         print(f"Sending email to {self.recipient}...")
         self.mark_done()
 
@@ -37,6 +47,7 @@ class DataProcessingJob(Job):
         self.dataset = dataset
 
     def execute(self) -> None:
+        self.add_log(f"Process dataset {self.dataset}")
         print(f"Processing dataset {self.dataset}...")
         self.mark_done()
 
@@ -49,15 +60,9 @@ class PriorityJob(Job):
         self.priority = priority
 
     def execute(self) -> None:
-        print(
-            f"Executing PRIORITY {self.priority} job: "
-            f"{self.description}"
-        )
+        self.add_log(f"Priority {self.priority} job started")
+        print(f"Executing PRIORITY {self.priority} job: {self.description}")
         self.mark_done()
 
     def __repr__(self) -> str:
-        return (
-            f"<PriorityJob id={self.job_id} "
-            f"priority={self.priority} "
-            f"status={self.status}>"
-        )
+        return (f"<PriorityJob id={self.job_id} priority={self.priority} status={self.status}>")
