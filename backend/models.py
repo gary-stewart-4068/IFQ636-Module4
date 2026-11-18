@@ -2,6 +2,8 @@
 Defines the Job hierarchy (parent + child classes).
 Polymorphism: each subclass implements its own execute().
 """
+from datetime import datetime
+
 class Job:
     """Parent/base class shared by all job types."""
     def __init__(self, job_id: int, description: str) -> None:
@@ -10,6 +12,8 @@ class Job:
         self.status = "pending"
         # encapsulated attribute
         self.__logs = []
+        self.start_time = None
+        self.end_time = None
 
     def execute(self) -> None:
         """Must be overridden by subclasses."""
@@ -25,6 +29,19 @@ class Job:
     def get_logs(self) -> list:
         return list(self.__logs)
 
+    def start(self) -> None:
+        self.start_time = datetime.now()
+        self.add_log(f"Started at {self.start_time}")
+
+    def end(self) -> None:
+        self.end_time = datetime.now()
+        self.add_log(f"Ended at {self.end_time}")
+
+    def get_duration(self):
+        if self.start_time and self.end_time:
+            return (self.end_time - self.start_time).total_seconds()
+        return None
+    
     def __repr__(self) -> str:
         return f"<Job id={self.job_id} status={self.status}desc='{self.description}'>"
 

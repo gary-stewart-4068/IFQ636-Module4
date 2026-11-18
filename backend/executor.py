@@ -22,10 +22,12 @@ class Executor:
     def run_job(self, job: Job) -> None:
         try:
             print(f"[{self._ts()}] Executing job {job.job_id} ({job.description})...")
+            job.start()
             time.sleep(random.uniform(1, 3))
             if random.random() < 0.2: # ~20% simulated failure raise JobExecutionError(job.job_id)
                 raise JobExecutionError(job.job_id)
             job.execute()
+            job.end()
             print(f"[{self._ts()}] Completed job {job.job_id}.") 
         except JobExecutionError as e:
             print(f"[{self._ts()}] Error in job {e.job_id}: {e}")
