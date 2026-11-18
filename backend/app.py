@@ -35,5 +35,8 @@ if __name__ == "__main__":
     print("\n=== JOB LOGS ===")
     for job in jobs:
         print(f"\nJob {job.job_id}")
+        duration = job.get_duration()
+        if duration is not None:
+            print(f"Duration: {duration:.2f} seconds")
         for log in job.get_logs():
             print(f"  - {log}")
