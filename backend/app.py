@@ -2,19 +2,19 @@
 Build a few jobs, register them, run them, print a summary.
 """
 
-from models import EmailJob, DataProcessingJob, PriorityJob
+from job_factory import JobFactory
 from task_manager import TaskManager
 from executor import Executor
 
 def build_jobs():
     return [
-        EmailJob(1, "user@example.com"),
-        DataProcessingJob(2, "dataset_A"),
-        PriorityJob(3, "Critical Security Alert", 10),
-        PriorityJob(4, "Urgent payroll processing", 5),
-        EmailJob(5, "admin@example.com"),
-        DataProcessingJob(6, "dataset_B"),
-        ]
+        JobFactory.create_job("email", 1, "user@example.com"),
+        JobFactory.create_job("data", 2, "dataset_A" ),
+        JobFactory.create_job("priority", 3, "Critical security alert", 10),
+        JobFactory.create_job("priority", 4, "Urgent payroll processing", 5),
+        JobFactory.create_job("email", 5, "admin@example.com"),
+        JobFactory.create_job("data", 6, "dataset_B")
+    ]
 
 if __name__ == "__main__":
     jobs = []
