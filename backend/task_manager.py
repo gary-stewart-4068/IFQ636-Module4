@@ -19,3 +19,23 @@ class TaskManager:
 
     def get_jobs_by_status(self, status: str) -> List[Job]: 
         return list(self.jobs_by_status.get(status, []))
+
+    def get_all_jobs_sorted(self) -> List[Job]:
+        jobs = []
+        for status_jobs in self.jobs_by_status.values():
+            jobs.extend(status_jobs)
+        jobs.sort(
+            key=lambda job: getattr(job, "priority", 0),
+            reverse=True
+        )
+        return jobs
+
+    def get_jobs_in_priority_order(self):
+        jobs = []
+        for status_jobs in self.jobs_by_status.values():
+            jobs.extend(status_jobs)
+        return sorted(
+            jobs,
+            key=lambda job: getattr(job, "priority", 0),
+            reverse=True
+        )
