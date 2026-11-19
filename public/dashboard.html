@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job Scheduler Dashboard</title>
+</head>
+
+<body>
+    <h1>Job Scheduler Logs</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Output</th>
+            </tr>
+        </thead>
+        <tbody id="logs"></tbody>
+    </table>
+    <script>
+        fetch('/api/logs')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('logs');
+                data.forEach(log => {tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            ${new Date(log.timestamp).toLocaleString()}
+                        </td>
+                        <td>
+                            <pre>${log.output || log.message}</pre>
+                        </td>
+                    </tr>
+                `;
+                });
+            });
+    </script>
+</body>
+</html>
